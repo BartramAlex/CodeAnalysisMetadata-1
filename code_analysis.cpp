@@ -6,6 +6,7 @@
 
 #include "code_analysis.hpp"
 #include "get_language_from_filename.hpp"
+#include <iostream>
 
 #include <string>
 
@@ -24,6 +25,14 @@ bool code_analysis(const analysis_request& request) {
 
     // code analysis processing that is not yet implemented
 
+	
+	if(language==""){
+		if(request.given_filename == "-" ){
+				std::cout << "ERROR: Using stdin requires a declared language" << std::endl; 
+		}
+		else { 	std::cout << "ERROR: Extension not supported" << std::endl; }
+	}
+
     return false;
 }
 
@@ -32,8 +41,27 @@ bool code_analysis(const analysis_request& request) {
  * @retval filename
  */
 std::string analysis_filename(const analysis_request& request) {
+	std::string fName = "";	
+	if(request.option_filename != ""){
+		fName = request.option_filename;
+	}
+	else if(request.option_filename == ""){
 
-    return "";
+		if(request.given_filename == "-"){
+			if(request.entry_filename == "data"){ fName = request.option_filename; }
+			else { fName = request.entry_filename; }
+		}
+
+		else if(request.entry_filename == "data"){
+			fName = request.given_filename;
+		}
+
+	}
+	
+	//implement filename validity test later
+	//std::cout << "Valid Filename\t Designated Filename: " << request.option_filename << std::endl;
+	
+    return fName;
 }
 
 /** URL extracted from the request
@@ -41,8 +69,16 @@ std::string analysis_filename(const analysis_request& request) {
  * @retval URL
  */
 std::string analysis_url(const analysis_request& request) {
+    
+    std::string URL = "";	
+	if(request.option_url != ""){
+		URL = request.option_url;
+	}
+	else if(request.option_url == ""){
+		URL = request.given_url;
+	}
 
-    return "";
+    return URL;
 }
 
 /** Language extracted from the request and the filename
@@ -51,6 +87,14 @@ std::string analysis_url(const analysis_request& request) {
  * @retval language
  */
 std::string analysis_language(const analysis_request& request, const std::string& filename) {
+	
+	std::string lang = "";	
+	if(request.option_language != ""){
+		lang = request.option_language;
+	}
+	else if(request.option_language == ""){
+		lang = get_language_from_filename(filename);
+	}
 
-    return "";
+    return lang;
 }
