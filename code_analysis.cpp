@@ -52,8 +52,11 @@ std::string analysis_filename(const analysis_request& request) {
 			else { fName = request.entry_filename; }
 		}
 
-		else if(request.entry_filename == "data"){
-			fName = request.given_filename;
+		else {
+			if(request.entry_filename == "data"){
+				fName = request.given_filename;
+			}
+			else { fName = request.entry_filename; }
 		}
 
 	}
